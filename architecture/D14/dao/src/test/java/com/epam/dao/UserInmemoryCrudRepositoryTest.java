@@ -1,6 +1,7 @@
 package com.epam.dao;
 
 import com.epam.core.User;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -13,9 +14,13 @@ public class UserInmemoryCrudRepositoryTest {
 
   private UserInmemoryCrudRepository dao;
 
+  @Before
+  public void init() throws Exception {
+    dao = new UserInmemoryCrudRepository();
+  }
+
   @Test
   public void create() throws Exception {
-    dao = new UserInmemoryCrudRepository();
     User user = dao.create(user("AAA", asList(1L, 2L)));
     User readUser = dao.read(user.getId());
     assertTrue(user == readUser);
@@ -23,16 +28,14 @@ public class UserInmemoryCrudRepositoryTest {
 
   @Test
   public void read() throws Exception {
-    dao = new UserInmemoryCrudRepository();
     User user1 = dao.create(user("AAA", asList(1L, 2L)));
-    User user2 = dao.create(user("BBB", asList(1L, 2L)));
+    dao.create(user("BBB", asList(1L, 2L)));
     User readUser = dao.read(user1.getId());
     assertTrue(user1 == readUser);
   }
 
   @Test
   public void update() throws Exception {
-    dao = new UserInmemoryCrudRepository();
     User user = dao.create(user("AAA", new ArrayList<>(asList(1L, 2L))));
     user.getGroups().add(3L);
     dao.update(user);
@@ -42,9 +45,8 @@ public class UserInmemoryCrudRepositoryTest {
 
   @Test
   public void delete() throws Exception {
-    dao = new UserInmemoryCrudRepository();
     User user1 = dao.create(user("AAA", asList(1L, 2L)));
-    User user2 = dao.create(user("BBB", asList(1L, 2L)));
+    dao.create(user("BBB", asList(1L, 2L)));
 
     dao.delete(user1.getId());
 
@@ -52,7 +54,7 @@ public class UserInmemoryCrudRepositoryTest {
     assertTrue(read == null);
   }
 
-  private User user(String name, List<Long> arraylist) {
-    return new User(name, arraylist);
+  private User user(String name, List<Long> groupIds) {
+    return new User(name, groupIds);
   }
 }
