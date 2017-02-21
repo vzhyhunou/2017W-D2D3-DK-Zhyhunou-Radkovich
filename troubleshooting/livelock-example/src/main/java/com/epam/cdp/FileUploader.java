@@ -15,12 +15,11 @@ public class FileUploader {
     while (isActive) {
       if (storage.currentUploader != this) {
         try {
-          System.out.println("wait...");
           wait(10);
-        } catch (InterruptedException ignored) {
-        }
+        } catch (InterruptedException ignored) {}
       }
       if (otherUploader.isActive) {
+        doMemoryConsumptionStuff(storage);
         System.out.println("changing current uploader to " + name);
         storage.setCurrentUploader(otherUploader);
         continue;
@@ -28,5 +27,9 @@ public class FileUploader {
       System.out.println(this.name + " is done");
       isActive = false;
     }
+  }
+
+  private void doMemoryConsumptionStuff(FileStorage storage) {
+    storage.log(new String("changing current uploader to " + name));
   }
 }
