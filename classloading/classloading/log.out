@@ -1,0 +1,19 @@
+2017-03-01 15:19:26 INFO  CliApplication:44 - Menu: 
+All - show loaded modules
+Load1 - load first plugin with given name
+Load2 - load second plugin with given name
+Call1 - call first's plugin functionality
+Call2 - call second plugin functionality
+
+2017-03-01 15:19:30 INFO  PluginLoader:87 - No classes loaded
+2017-03-01 15:19:30 INFO  PluginLoader:87 - Loaded classes are
+2017-03-01 15:19:34 INFO  PluginLoader:87 - Could not invoke because plugin was not loaded
+2017-03-01 15:19:36 INFO  CliApplication:44 - Please, try again
+
+2017-03-01 15:19:44 INFO  PluginLoader:87 - PLUGIN1
+2017-03-01 15:19:46 INFO  PluginLoader:87 - Loaded classes are
+2017-03-01 15:19:46 INFO  PluginLoader:87 -   - plugin1 : [com.epam.cdp.cl.plugin1.Plugin1]
+2017-03-01 15:19:53 INFO  PluginLoader:87 - PLUGIN1
+2017-03-01 15:20:02 INFO  PluginLoader:87 - Loaded classes are
+2017-03-01 15:20:02 INFO  PluginLoader:87 -   - plugin1 : [com.epam.cdp.cl.plugin1.Plugin1]
+2017-03-01 15:20:02 INFO  PluginLoader:87 -   - plugin2 : [com.epam.cdp.cl.plugin2.Plugin2]

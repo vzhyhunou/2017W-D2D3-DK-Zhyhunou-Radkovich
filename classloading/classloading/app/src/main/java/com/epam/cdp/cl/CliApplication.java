@@ -1,12 +1,12 @@
 package com.epam.cdp.cl;
 
+import org.apache.log4j.*;
+
 import java.util.*;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 
 public class CliApplication {
 
-  static final Logger logger = Logger.getLogger(PluginLoader.class);
+  static final Logger logger = Logger.getLogger(CliApplication.class);
   private static Scanner scanner = new Scanner(System.in);
 
   public static void main(String[] args) {
@@ -29,7 +29,7 @@ public class CliApplication {
           pluginLoader.call(PluginLoader.PLUGIN1);
           break;
         case "call2":
-          pluginLoader.call(PluginLoader.PLUGIN1);
+          pluginLoader.call(PluginLoader.PLUGIN2);
           break;
         case "exit":
           return;
@@ -40,8 +40,8 @@ public class CliApplication {
     }
   }
 
-  private static void print(String call2) {
-    System.out.println(call2);
+  private static void print(String message) {
+    logger.info(message);
   }
 
   private static void printPrompt() {

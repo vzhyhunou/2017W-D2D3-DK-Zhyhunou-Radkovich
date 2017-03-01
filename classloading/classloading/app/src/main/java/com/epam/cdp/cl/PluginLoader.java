@@ -1,11 +1,11 @@
 package com.epam.cdp.cl;
 
+import org.apache.log4j.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.jar.*;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 
 public class PluginLoader extends ClassLoader {
   static final Logger logger = Logger.getLogger(PluginLoader.class);
@@ -84,6 +84,6 @@ public class PluginLoader extends ClassLoader {
   }
 
   public static void print(String message) {
-    System.out.println(message);
+    logger.info(message);
   }
 }
