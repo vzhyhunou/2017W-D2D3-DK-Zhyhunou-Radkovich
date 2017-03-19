@@ -1,8 +1,8 @@
 package com.epam.cdp.webservices.ws;
 
 import com.epam.cdp.webservices.repository.UserRepository;
-import io.spring.guides.gs_producing_web_service.GetUserEmailRequest;
-import io.spring.guides.gs_producing_web_service.GetUserEmailResponse;
+import by.epam.GetUserEmailRequest;
+import by.epam.GetUserEmailResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -11,7 +11,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 @Endpoint
 public class UserEndpoint {
-  private static final String NAMESPACE_URI = "http://spring.io/guides/gs-producing-web-service";
+  public static final String NAMESPACE_URI = "http://epam.by";
 
   private UserRepository repository;
 
