@@ -1,8 +1,21 @@
 import http.client
+import sys
 
 conn = http.client.HTTPConnection("localhost:8080")
 
-payload = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n                  xmlns:gs=\"http://epam.by\">\n    <soapenv:Header/>\n    <soapenv:Body>\n        <gs:getUserEmailRequest>\n            <gs:name>BBB</gs:name>\n        </gs:getUserEmailRequest>\n    </soapenv:Body>\n</soapenv:Envelope>"
+user_name = sys.argv[1]
+
+payload = """
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+                  xmlns:gs="http://epam.by">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <gs:getUserEmailRequest>
+            <gs:name>{0}</gs:name>
+        </gs:getUserEmailRequest>
+    </soapenv:Body>
+</soapenv:Envelope>
+""".format(user_name)
 
 headers = {
     'content-type': "text/xml",
