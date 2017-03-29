@@ -2,6 +2,7 @@ package com.epam.cdp.spring.service.impl;
 
 import com.epam.cdp.spring.cache.*;
 import com.epam.cdp.spring.configuration.*;
+import com.epam.cdp.spring.dao.*;
 import com.epam.cdp.spring.model.*;
 import com.epam.cdp.spring.service.*;
 import org.junit.*;
@@ -27,6 +28,8 @@ public class TicketServiceTest {
   FlightService flightService;
   @Autowired
   CustomerService customerService;
+  @Autowired
+  TicketRepository ticketRepository;
 
   @Before
   public void setUp() throws Exception {
@@ -39,6 +42,7 @@ public class TicketServiceTest {
   @After
   public void tearDown() throws Exception {
     Arrays.asList(1, 2, 3, 4).forEach(id -> ticketService.delete(id));
+    ReflectionTestUtils.setField(ticketRepository, "incrementalId", 1);
   }
 
   @Test
