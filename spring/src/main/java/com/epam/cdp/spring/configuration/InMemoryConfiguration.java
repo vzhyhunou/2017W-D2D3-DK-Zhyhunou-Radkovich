@@ -1,15 +1,11 @@
 package com.epam.cdp.spring.configuration;
 
-import com.epam.cdp.spring.dao.CustomerRepository;
-import com.epam.cdp.spring.dao.FlightRepository;
-import com.epam.cdp.spring.dao.TicketRepository;
-import com.epam.cdp.spring.dao.impl.inmemory.CustomerInMemoryRepository;
-import com.epam.cdp.spring.dao.impl.inmemory.FlightInMemoryRepository;
-import com.epam.cdp.spring.dao.impl.inmemory.TickerInMemoryRepository;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import com.epam.cdp.spring.cache.*;
+import com.epam.cdp.spring.dao.*;
+import com.epam.cdp.spring.dao.impl.inmemory.*;
+import org.springframework.context.annotation.*;
+
+import java.util.*;
 
 @Configuration
 @ComponentScan("com.epam.cdp.spring.service")
@@ -31,5 +27,12 @@ public class InMemoryConfiguration {
   @Profile("inmemory")
   public FlightRepository flightRepository() {
     return new FlightInMemoryRepository();
+  }
+
+  @Bean
+  @Scope("prototype")
+  @Profile("cacheble")
+  public Cache serviceCache() {
+    return new Cache(new HashMap<>());
   }
 }

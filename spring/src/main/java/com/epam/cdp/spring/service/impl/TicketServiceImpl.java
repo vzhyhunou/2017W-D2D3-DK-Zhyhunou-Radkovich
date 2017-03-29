@@ -1,18 +1,23 @@
 package com.epam.cdp.spring.service.impl;
 
+import com.epam.cdp.spring.cache.*;
 import com.epam.cdp.spring.dao.TicketRepository;
 import com.epam.cdp.spring.model.Ticket;
 import com.epam.cdp.spring.service.TicketService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TicketServiceImpl implements TicketService {
 
   @Autowired
   TicketRepository ticketRepository;
+
+  @Qualifier("serviceCache")
+  @Autowired
+  Cache serviceCache;
 
   @Override
   public void create(Ticket obj) {

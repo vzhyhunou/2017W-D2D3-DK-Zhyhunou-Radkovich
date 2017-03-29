@@ -1,19 +1,24 @@
 package com.epam.cdp.spring.service.impl;
 
+import com.epam.cdp.spring.cache.*;
 import com.epam.cdp.spring.dao.FlightRepository;
 import com.epam.cdp.spring.model.Flight;
 import com.epam.cdp.spring.service.FlightService;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class FlightServiceImpl implements FlightService {
 
   @Autowired
   FlightRepository flightRepository;
+
+  @Qualifier("serviceCache")
+  @Autowired
+  Cache serviceCache;
 
   @Override
   public void create(Flight obj) {
