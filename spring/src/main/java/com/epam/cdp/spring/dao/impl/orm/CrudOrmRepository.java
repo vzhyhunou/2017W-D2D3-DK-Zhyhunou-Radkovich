@@ -8,8 +8,9 @@ import java.util.function.Predicate;
 
 import static com.epam.cdp.spring.dao.impl.orm.MetaObjectMapper.fillPreparedStatement;
 import static com.epam.cdp.spring.dao.impl.orm.MetaObjectMapper.mapResultSet;
+import static java.lang.String.join;
+import static java.util.Collections.nCopies;
 import static java.util.stream.Collectors.toList;
-import static org.springframework.util.StringUtils.arrayToCommaDelimitedString;
 
 public class CrudOrmRepository {
 
@@ -41,11 +42,9 @@ public class CrudOrmRepository {
       fillPreparedStatement(metaObject, ps);
       ps.execute();
       ResultSet resultSet = ps.getResultSet();
-      ResultSetMetaData metaData = resultSet.getMetaData();
       MetaObject resultMetaObject = metaObject.copy();
       while (resultSet.next()) {
-        Map<String, Object> columnValues = resultMetaObject.getColumnValues();
-        mapResultSet(resultSet, metaData, columnValues);
+        mapResultSet(resultSet, resultMetaObject);
         result.add(resultMetaObject.restore(objectType));
       }
     } catch (SQLException e) {
@@ -87,10 +86,10 @@ public class CrudOrmRepository {
   }
 
   private String generateUpdateQuery(String tableName, List<String> setExpressions, List<String> conditions) {
-    String newColumnValues = String.join(", ", setExpressions);
+    String newColumnValues = join(", ", setExpressions);
     String updateSql = String.format("UPDATE %s SET %s", tableName, newColumnValues);
     if (!conditions.isEmpty()) {
-      updateSql += " WHERE " + String.join(" AND ", conditions);
+      updateSql += " WHERE " + join(" AND ", conditions);
     }
     return updateSql;
   }
@@ -98,26 +97,21 @@ public class CrudOrmRepository {
   private String generateDeleteQuery(MetaObject metaObject, List<String> conditions) {
     String deleteSql = String.format("DELETE FROM %s", metaObject.getTableName());
     if (!conditions.isEmpty()) {
-      deleteSql += " WHERE " + String.join(" AND ", conditions);
+      deleteSql += " WHERE " + join(" AND ", conditions);
     }
     return deleteSql;
   }
 
   private String generateInsertQuery(String tableName, Set<String> columns) {
-    String valuesPattern = "";
-    for (int i = 0; i < columns.size() - 1; i++) {
-      valuesPattern += "?,";
-    }
-    valuesPattern += "?";
-    return String.format("INSERT INTO %S (%s) VALUES (%s);",
-        tableName, arrayToCommaDelimitedString(columns.toArray()), valuesPattern);
+    return String.format("INSERT INTO %s (%s) VALUES (%s);",
+        tableName, join(", ", columns), join(", ", nCopies(columns.size(), "?")));
   }
 
   private String generateSelectQuery(MetaObject metaObject) {
     String sql = "SELECT * FROM %s";
     List<String> conditions = createConditions(metaObject);
     if (!conditions.isEmpty())
-      sql += "\nWHERE " + String.join(" AND ", conditions);
+      sql += "\nWHERE " + join(" AND ", conditions);
     return String.format(sql, metaObject.getTableName());
   }
 

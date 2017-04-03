@@ -40,8 +40,10 @@ class MetaObjectMapper {
     return i;
   }
 
-  static void mapResultSet(ResultSet resultSet, ResultSetMetaData metaData, Map<String, Object> columnValues)
+  static void mapResultSet(ResultSet resultSet, MetaObject metaObject)
       throws SQLException {
+    ResultSetMetaData metaData = resultSet.getMetaData();
+    Map<String, Object> columnValues = metaObject.getColumnValues();
     for (int i = 1; i <= metaData.getColumnCount(); i++) {
       String columnName = metaData.getColumnName(i);
       String sqlType = metaData.getColumnTypeName(i);
