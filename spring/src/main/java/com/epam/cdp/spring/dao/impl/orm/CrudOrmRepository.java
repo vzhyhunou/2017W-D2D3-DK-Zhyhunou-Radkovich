@@ -42,11 +42,11 @@ public class CrudOrmRepository {
       ps.execute();
       ResultSet resultSet = ps.getResultSet();
       ResultSetMetaData metaData = resultSet.getMetaData();
-      MetaObject resultSetMeta = metaObject.copy();
+      MetaObject resultMetaObject = metaObject.copy();
       while (resultSet.next()) {
-        Map<String, Object> columnValues = resultSetMeta.getColumnValues();
+        Map<String, Object> columnValues = resultMetaObject.getColumnValues();
         mapResultSet(resultSet, metaData, columnValues);
-        result.add(resultSetMeta.restore(objectType));
+        result.add(resultMetaObject.restore(objectType));
       }
     } catch (SQLException e) {
       e.printStackTrace();
@@ -59,13 +59,10 @@ public class CrudOrmRepository {
     MetaObject sampleMeta = MetaObject.from(sample);
     List<String> setExpressions = createConditions(sampleMeta);
     if (setExpressions.isEmpty()) return;//no need to update
-    String deleteSql = String.format("UPDATE %s SET %s", conditionMeta.getTableName(), String.join(", ", setExpressions));
     List<String> conditions = createConditions(conditionMeta);
-    if (!conditions.isEmpty()) {
-      deleteSql += " WHERE " + String.join(" AND ", conditions);
-    }
+    String updateSql = generateUpdateQuery(conditionMeta.getTableName(), setExpressions, conditions);
     try (Connection connection = dataSource.getConnection();
-         PreparedStatement ps = connection.prepareStatement(deleteSql)) {
+         PreparedStatement ps = connection.prepareStatement(updateSql)) {
       int startFrom = fillPreparedStatement(sampleMeta, ps);
       if (!conditions.isEmpty()) fillPreparedStatement(conditionMeta, ps, startFrom);
       int update = ps.executeUpdate();
@@ -77,11 +74,8 @@ public class CrudOrmRepository {
 
   public void delete(Object condition) {
     MetaObject metaObject = MetaObject.from(condition);
-    String deleteSql = String.format("DELETE FROM %s", metaObject.getTableName());
     List<String> conditions = createConditions(metaObject);
-    if (!conditions.isEmpty()) {
-      deleteSql += " WHERE " + String.join(" AND ", conditions);
-    }
+    String deleteSql = generateDeleteQuery(metaObject, conditions);
     try (Connection connection = dataSource.getConnection();
          PreparedStatement ps = connection.prepareStatement(deleteSql)) {
       if (!conditions.isEmpty()) fillPreparedStatement(metaObject, ps);
@@ -90,6 +84,23 @@ public class CrudOrmRepository {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+  }
+
+  private String generateUpdateQuery(String tableName, List<String> setExpressions, List<String> conditions) {
+    String newColumnValues = String.join(", ", setExpressions);
+    String updateSql = String.format("UPDATE %s SET %s", tableName, newColumnValues);
+    if (!conditions.isEmpty()) {
+      updateSql += " WHERE " + String.join(" AND ", conditions);
+    }
+    return updateSql;
+  }
+
+  private String generateDeleteQuery(MetaObject metaObject, List<String> conditions) {
+    String deleteSql = String.format("DELETE FROM %s", metaObject.getTableName());
+    if (!conditions.isEmpty()) {
+      deleteSql += " WHERE " + String.join(" AND ", conditions);
+    }
+    return deleteSql;
   }
 
   private String generateInsertQuery(String tableName, Set<String> columns) {
