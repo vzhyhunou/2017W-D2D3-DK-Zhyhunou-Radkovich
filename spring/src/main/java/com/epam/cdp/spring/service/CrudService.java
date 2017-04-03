@@ -1,6 +1,8 @@
 package com.epam.cdp.spring.service;
 
-import com.epam.cdp.spring.dao.impl.inmemory.CrudRepository;
-
-public interface CrudService<T, O> extends CrudRepository<T, O> {
+public interface CrudService<T, O> {
+  void create(O obj);
+  O read(T id);
+  O update(T id, O obj);
+  O delete(T id);
 }

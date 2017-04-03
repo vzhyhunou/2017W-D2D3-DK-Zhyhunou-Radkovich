@@ -1,6 +1,5 @@
 package com.epam.cdp.spring.dao;
 
-import com.epam.cdp.spring.dao.impl.inmemory.CrudRepository;
 import com.epam.cdp.spring.model.Flight;
 import org.joda.time.DateTime;
 

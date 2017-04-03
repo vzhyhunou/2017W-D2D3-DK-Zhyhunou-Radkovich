@@ -26,7 +26,7 @@ public class TicketServiceImpl implements TicketService {
 
   @Override
   public Ticket read(Integer id) {
-    return ticketRepository.read(id);
+    return ticketRepository.read(id, Ticket.class);
   }
 
   @Override
@@ -36,7 +36,7 @@ public class TicketServiceImpl implements TicketService {
 
   @Override
   public Ticket delete(Integer id) {
-    return ticketRepository.delete(id);
+    return ticketRepository.delete(id, Ticket.class);
   }
 
   public List<Ticket> getAllForFlight(int flightId) {

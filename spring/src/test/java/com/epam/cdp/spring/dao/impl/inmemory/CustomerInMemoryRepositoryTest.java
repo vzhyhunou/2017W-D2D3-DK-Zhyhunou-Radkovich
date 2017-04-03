@@ -23,8 +23,8 @@ public class CustomerInMemoryRepositoryTest {
     Customer customer2 = new Customer(2, "b", "c");
     repository.create(customer2);
 
-    assertEquals(customer1, repository.read(1));
-    assertEquals(customer2, repository.read(2));
+    assertEquals(customer1, repository.read(1, Customer.class));
+    assertEquals(customer2, repository.read(2, Customer.class));
   }
 
   @Test
@@ -34,6 +34,6 @@ public class CustomerInMemoryRepositoryTest {
 
     Customer updatedCustomer = repository.update(customer1.customerId, customer1);
     assertEquals(customer1, updatedCustomer);
-    assertEquals(customer1, repository.read(customer1.customerId));
+    assertEquals(customer1, repository.read(customer1.customerId, Customer.class));
   }
 }

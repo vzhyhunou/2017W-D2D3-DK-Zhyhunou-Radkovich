@@ -27,7 +27,7 @@ public class FlightServiceImpl implements FlightService {
 
   @Override
   public Flight read(Integer id) {
-    return flightRepository.read(id);
+    return flightRepository.read(id, Flight.class);
   }
 
   @Override
@@ -37,7 +37,7 @@ public class FlightServiceImpl implements FlightService {
 
   @Override
   public Flight delete(Integer id) {
-    return flightRepository.delete(id);
+    return flightRepository.delete(id, Flight.class);
   }
 
   @Override

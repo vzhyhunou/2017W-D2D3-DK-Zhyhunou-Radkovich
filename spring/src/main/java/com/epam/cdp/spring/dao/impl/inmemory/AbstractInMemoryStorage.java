@@ -12,7 +12,7 @@ public abstract class AbstractInMemoryStorage<T, O> {
     storage.put(generateId(), obj);
   }
 
-  public O read(T id) {
+  public O read(T id, Class<O> entityType) {
     return storage.get(id);
   }
 
@@ -21,7 +21,7 @@ public abstract class AbstractInMemoryStorage<T, O> {
     return storage.get(id);
   }
 
-  public O delete(T id) {
+  public O delete(T id, Class<O> entityType) {
     return storage.remove(id);
   }
 }

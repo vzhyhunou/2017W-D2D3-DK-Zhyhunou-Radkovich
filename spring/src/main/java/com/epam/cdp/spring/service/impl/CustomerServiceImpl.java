@@ -24,7 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public Customer read(Integer id) {
-    return customerRepository.read(id);
+    return customerRepository.read(id, Customer.class);
   }
 
   @Override
@@ -34,6 +34,6 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public Customer delete(Integer id) {
-    return customerRepository.delete(id);
+    return customerRepository.delete(id, Customer.class);
   }
 }

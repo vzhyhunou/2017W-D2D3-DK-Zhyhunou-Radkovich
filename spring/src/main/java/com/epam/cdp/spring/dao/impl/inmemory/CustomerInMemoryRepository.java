@@ -13,7 +13,7 @@ public class CustomerInMemoryRepository
 
   @Override
   public Customer getById(int id) {
-    return read(id);
+    return read(id, Customer.class);
   }
 
   @Override
