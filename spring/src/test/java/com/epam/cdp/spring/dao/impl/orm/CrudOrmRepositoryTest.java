@@ -2,6 +2,9 @@ package com.epam.cdp.spring.dao.impl.orm;
 
 import com.epam.cdp.spring.configuration.InMemoryConfiguration;
 import com.epam.cdp.spring.model.Customer;
+import com.epam.cdp.spring.model.Flight;
+import com.epam.cdp.spring.model.Ticket;
+import org.joda.time.DateTime;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +30,7 @@ public class CrudOrmRepositoryTest {
   private CrudOrmRepository repository;
 
   @Test
-  public void create() throws Exception {
+  public void createCustomer() throws Exception {
     Customer expectedCustomer1 = new Customer(1, "firstname1", "lastname1");
     Customer expectedCustomer2 = new Customer(2, "firstname2", "lastname2");
 
@@ -42,7 +45,7 @@ public class CrudOrmRepositoryTest {
   }
 
   @Test
-  public void update() throws Exception {
+  public void updateCustomer() throws Exception {
     Customer customer3 = new Customer(3, "firstname3", "lastname3");
     Customer customer4 = new Customer(4, "firstname4", "lastname4");
 
@@ -66,7 +69,7 @@ public class CrudOrmRepositoryTest {
   }
 
   @Test
-  public void delete() throws Exception {
+  public void deleteCustomer() throws Exception {
     Customer customer5 = new Customer(5, "firstname3", "lastname4");
     Customer customer6 = new Customer(6, "firstname", "lastname4");
     Customer customer7 = new Customer(7, "firstname", "lastname4");
@@ -81,5 +84,35 @@ public class CrudOrmRepositoryTest {
 
     List<Customer> customerList = repository.read(new Customer(null, null, "lastname4"), Customer.class);
     assertEquals(singletonList(customer5), customerList);
+  }
+
+  @Test
+  public void createReadFlight() throws Exception {
+    Flight flight1 = new Flight(1, DateTime.parse("2000-11-11"));
+
+    repository.create(flight1);
+
+    List<Flight> flights = repository.read(new Flight(1, null), Flight.class);
+    assertTrue(!flights.isEmpty());
+    assertEquals(flight1, flights.get(0));
+  }
+
+  @Test
+  public void createReadTicket() throws Exception {
+    Ticket ticket1 = new Ticket(1, 1, 1, 1, true);
+    Ticket ticket2 = new Ticket(1, 1, 2, 2, true);
+    Ticket ticket3 = new Ticket(1, 1, 3, 3, false);
+
+    repository.create(ticket1);
+    repository.create(ticket2);
+    repository.create(ticket3);
+
+    Ticket ticketActual1 = repository.read(new Ticket(null, null, 1, null, null), Ticket.class).get(0);
+    Ticket ticketActual2 = repository.read(new Ticket(null, null, 2, null, null), Ticket.class).get(0);
+    Ticket ticketActual3 = repository.read(new Ticket(null, null, 3, null, null), Ticket.class).get(0);
+
+    assertEquals(ticket1, ticketActual1);
+    assertEquals(ticket2, ticketActual2);
+    assertEquals(ticket3, ticketActual3);
   }
 }

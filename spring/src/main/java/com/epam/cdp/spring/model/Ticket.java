@@ -1,13 +1,27 @@
 package com.epam.cdp.spring.model;
 
-public class Ticket {
-  public int flightId;
-  public int customerId;
-  public int ticketId;
-  public int place;
-  public boolean isBooked;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
-  public Ticket(int flightId, int customerId, int ticketId, int place, boolean isBooked) {
+@Entity
+@Table(name = "TICKETS")
+public class Ticket {
+  @Column(name = "flightId")
+  public Integer flightId;
+  @Column(name = "customerId")
+  public Integer customerId;
+  @Column(name = "ticketId")
+  public Integer ticketId;
+  @Column(name = "place")
+  public Integer place;
+  @Column(name = "isBooked")
+  public Boolean isBooked;
+
+  public Ticket() {
+  }
+
+  public Ticket(Integer flightId, Integer customerId, Integer ticketId, Integer place, Boolean isBooked) {
     this.flightId = flightId;
     this.customerId = customerId;
     this.ticketId = ticketId;

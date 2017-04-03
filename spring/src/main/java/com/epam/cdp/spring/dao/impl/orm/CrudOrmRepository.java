@@ -1,36 +1,22 @@
 package com.epam.cdp.spring.dao.impl.orm;
 
-import org.joda.time.DateTime;
-
 import javax.sql.DataSource;
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import static com.epam.cdp.spring.dao.impl.orm.MetaObjectMapper.fillPreparedStatement;
+import static com.epam.cdp.spring.dao.impl.orm.MetaObjectMapper.mapResultSet;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.util.StringUtils.arrayToCommaDelimitedString;
 
 public class CrudOrmRepository {
 
   private DataSource dataSource;
-  private Map<String, String> javaToSqlType;
-  private Map<String, String> sqlToJavaType;
 
   public CrudOrmRepository(DataSource dataSource) {
     this.dataSource = dataSource;
-    javaToSqlType = new HashMap<String, String>() {{
-      put("String", "VARCHAR");
-      put("int", "INTEGER");
-      put("Integer", "INTEGER");
-      put("DateTime", "INTEGER");
-    }};
-
-    sqlToJavaType = new HashMap<>();
-    for (Map.Entry<String, String> entry : javaToSqlType.entrySet()) {
-      sqlToJavaType.put(entry.getValue(), entry.getKey());
-    }
   }
 
   public void create(Object obj) {
@@ -66,24 +52,6 @@ public class CrudOrmRepository {
       e.printStackTrace();
     }
     return result;
-  }
-
-  private void mapResultSet(ResultSet resultSet, ResultSetMetaData metaData, Map<String, Object> columnValues)
-      throws SQLException {
-    for (int i = 1; i <= metaData.getColumnCount(); i++) {
-      String columnName = metaData.getColumnName(i);
-      String sqlType = metaData.getColumnTypeName(i);
-      switch (sqlType) {
-        case "VARCHAR":
-          columnValues.put(columnName, resultSet.getString(i));
-          break;
-        case "INTEGER":
-          columnValues.put(columnName, resultSet.getInt(i));
-          break;
-        default:
-          throw new IllegalArgumentException(sqlType + " is not Implemented yet");
-      }
-    }
   }
 
   public void update(Object condition, Object sample) {
@@ -122,40 +90,6 @@ public class CrudOrmRepository {
     } catch (SQLException e) {
       e.printStackTrace();
     }
-  }
-
-  private int fillPreparedStatement(MetaObject metaObject, PreparedStatement ps) throws SQLException {
-    return fillPreparedStatement(metaObject, ps, 1);
-  }
-
-  private int fillPreparedStatement(MetaObject metaObject, PreparedStatement ps, int startFrom)
-      throws SQLException {
-    int i = startFrom;
-    for (Map.Entry<String, String> entry : metaObject.getColumnTypes().entrySet()) {
-      Object value = metaObject.getColumnValues().get(entry.getKey());
-      if (value != null) {
-        switch (entry.getValue()) {
-          case "int":
-            ps.setInt(i, (int) value);
-            break;
-          case "Integer":
-            ps.setInt(i, (Integer) value);
-            break;
-          case "String":
-            ps.setString(i, (String) value);
-            break;
-          case "DateTime":
-            DateTime dateTime = (DateTime) value;
-            Date sqlDate = new Date(dateTime.getMillis());
-            ps.setDate(i, sqlDate);
-            break;
-          default:
-            throw new IllegalArgumentException(entry.getValue() + " is not implemented yet");
-        }
-        i++;
-      }
-    }
-    return i;
   }
 
   private String generateInsertQuery(String tableName, Set<String> columns) {

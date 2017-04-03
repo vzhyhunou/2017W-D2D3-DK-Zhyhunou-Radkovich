@@ -2,11 +2,22 @@ package com.epam.cdp.spring.model;
 
 import org.joda.time.DateTime;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "FLIGHTS")
 public class Flight {
-  public int flightId;
+  @Column(name = "flightId")
+  public Integer flightId;
+  @Column(name = "dataOfFlight")
   public DateTime dataOfFlight;
 
-  public Flight(int flightId, DateTime dataOfFlight) {
+  public Flight() {
+  }
+
+  public Flight(Integer flightId, DateTime dataOfFlight) {
     this.flightId = flightId;
     this.dataOfFlight = dataOfFlight;
   }
